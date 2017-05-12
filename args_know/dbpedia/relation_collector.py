@@ -4,6 +4,7 @@ import re
 import sys
 import rdflib
 
+
 def read_relations(language_link_path):
     resource_count = 0
     for statements in NIFParser(language_link_path):
@@ -25,8 +26,8 @@ def write_relations(relation_file, output_path):
 
     with open(output_path, 'w') as out:
         for s, v, o in read_relations(relation_file):
-            from_resource = re.sub(source_regex, "", s)
-            target_resource = re.sub(target_regex, "", o)
+            from_resource = re.sub(source_regex, "", s).replace("\n", " ").replace("\t", " ")
+            target_resource = re.sub(target_regex, "", o).replace("\n", " ").replace("\t", " ")
 
             if isinstance(o, rdflib.term.Literal) and o.datatype:
                 out.write("%s\t%s\t%s\t%s\n" % (from_resource, v, target_resource, o.datatype))
